@@ -1,0 +1,60 @@
+[
+    {
+        "name": "Strike",
+        "type": "Attack",
+        "effects": {
+            "dealDamage": 6
+        },
+        "requiresTarget": true,
+        "cost": 1
+    },
+    {
+        "name": "Defend",
+        "type": "Skill",
+        "effects": {
+            "gainBlock": 5
+        },
+        "requiresTarget": false,
+        "cost": 1
+    },
+    {
+        "name": "Iron Wave",
+        "type": "Attack",
+        "effects": {
+            "gainBlock": 5,
+            "dealDamage": 5
+        },
+        "requiresTarget": true,
+        "cost": 1
+    }, 
+    {
+        "name": "Pommel Strike",
+        "type": "Attack",
+        "effects": {
+        "dealDamage": 9,
+            "draw": 1
+        },
+        "requiresTarget": true,
+        "cost": 1
+    },
+    {
+        "name": "Shrug It Off",
+        "type": "Skill",
+        "effects": {
+            "gainBlock": 8,
+            "draw": 1
+        },
+        "requiresTarget": false,
+        "cost": 1
+    },
+    {
+        "name": "Bash",
+        "type": "Attack",
+        "effects": {
+            "dealDamage": 8,
+            "applyVulnerable": 2
+        },
+        "requiresTarget": true,
+        "cost": 2
+    }
+]
