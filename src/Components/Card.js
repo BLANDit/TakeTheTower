@@ -36,6 +36,7 @@ const Card = ({card, cardId, name, effects, selectCard, deselectCard, activeCard
       onClick = {()=>handleClick(cardId)}
       className = {determineCardClass()}
     >
+      <div className='cardCost'>{card.cost}</div>
       <div className={'cardTypeStripe' + card.type}></div>
       <h3>{name}</h3>
       <div className = 'cardEffects'>
