@@ -26,6 +26,9 @@ const Combatant = ({combatant, onEnemyClick}) => {
           {(combatant.intent.gainStrength) && <span className='intentBuff'>🌟</span>}
           {(combatant.intent.dealDamage) && <span className='intentAttack'>🗡️{combatant.intent.dealDamage + (combatant.status.strength?combatant.status.strength:0)}</span>}
         </div>}
+        {combatant.dialogue && <div className = 'dialogue'>
+          <span>{combatant.dialogue}</span>
+        </div>}
       </div>
       <div className='combatantImageOuter'>
         {combatant.imageURL&&<img className='combatantImage' src={combatant.HP>0?combatant.imageURL:''}></img>}

@@ -23,13 +23,13 @@ function App() {
       energy: 3,
       maxEnergy: 3,
       status: {},
-      imageURL: "images/Beauregard.png"
+      imageURL: "images/Beauregard.png",
     },
     {
       id: 1,
       name: "Strider",
       team: "B",
-      HP: 46,
+      HP: 2,
       maxHP: 46,
       block: 0,
       status: {},
@@ -40,7 +40,7 @@ function App() {
       id: 2,
       name: "Strider",
       team: "B",
-      HP: 46,
+      HP: 2,
       maxHP: 46,
       block: 0,
       status: {},
@@ -221,6 +221,7 @@ function App() {
     }
 
     combatantsCopy = combatantsCopy.filter((combatant)=>combatant.HP>0);
+    if(combatantsCopy.length < 2) activeCombatant.dialogue = "Well, that wasn't so bad . . .";
 
     discard(activeCard);
 
