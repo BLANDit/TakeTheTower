@@ -18,6 +18,7 @@ function App() {
       name: "Beauregard",
       team: "A",
       HP: 70,
+      maxHP: 70,
       block: 0,
       energy: 3,
       maxEnergy: 3,
@@ -29,6 +30,7 @@ function App() {
       name: "Strider",
       team: "B",
       HP: 46,
+      maxHP: 46,
       block: 0,
       status: {},
       intent: {},
@@ -291,10 +293,10 @@ function App() {
           </div>
           <DrawPile drawPile={drawPile}></DrawPile>
         </div>
-        <Hand hand={hand} selectCard={selectCard} deselectCard={deselectCard} activeCard={activeCard}></Hand>
+        <Hand hand={hand} selectCard={selectCard} deselectCard={deselectCard} activeCard={activeCard} energyRemaining={activeCombatant.energy}></Hand>
         <div className = 'afterHand'>
           <EndTurnButton endCurrentTurn={endCurrentTurn}></EndTurnButton>
-          <ExhaustPile exhaustPile = {exhaustPile}></ExhaustPile>
+          {exhaustPile.length > 0 && <ExhaustPile exhaustPile = {exhaustPile}></ExhaustPile> }
           <DiscardPile discardPile = {discardPile}></DiscardPile>
         </div>
       </div>

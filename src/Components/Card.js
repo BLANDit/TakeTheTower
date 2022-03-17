@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import '../App.css'
 
-const Card = ({cardId, name, effects, selectCard, deselectCard, activeCard}) => {
+const Card = ({card, cardId, name, effects, selectCard, deselectCard, activeCard, energyRemaining}) => {
   const [enabled, setEnabled] = useState(true);
   const [selected, setSelected] = useState(false);
 
@@ -23,16 +23,27 @@ const Card = ({cardId, name, effects, selectCard, deselectCard, activeCard}) => 
     }
   }
 
+  function determineCardClass(){
+    let className = 'card ';
+    if(isSelected()) className += ' selected';
+    console.log(energyRemaining);
+    if(energyRemaining < card.cost) className += ' disabled';
+    return className;
+  }
+
   return (
     <div 
       onClick = {()=>handleClick(cardId)}
-      className = {isSelected()?'card selected':'card'}
+      className = {determineCardClass()}
     >
+      <div className={'cardTypeStripe' + card.type}></div>
       <h3>{name}</h3>
-      {effects.gainBlock && <p>Gain {effects.gainBlock} <span className='statusEffect'>Block</span></p>}
-      {effects.dealDamage && <p>Deal {effects.dealDamage} Damage</p>}
-      {effects.draw && <p>Draw {effects.draw}</p>}
-      {effects.applyVulnerable && <p>Apply {effects.applyVulnerable} Vulnerable</p>}
+      <div className = 'cardEffects'>
+        {effects.gainBlock && <p>Gain {effects.gainBlock} <span className='statusEffect'>Block</span></p>}
+        {effects.dealDamage && <p>Deal {effects.dealDamage} Damage</p>}
+        {effects.draw && <p>Draw {effects.draw}</p>}
+        {effects.applyVulnerable && <p>Apply {effects.applyVulnerable} Vulnerable</p>}
+      </div>
     </div>
   )
 }

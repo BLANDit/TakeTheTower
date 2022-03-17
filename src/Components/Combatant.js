@@ -3,9 +3,15 @@ import '../App.css'
 
 const Combatant = ({combatant, onEnemyClick}) => {
   const [enabled, setEnabled] = useState(true);
+  const [nameVisible, setNameVisible] = useState(false);
 
   function handleClick(e) {
     //setEnabled(!enabled);
+  }
+
+  let healthBarStyle={
+    'display': 'inline-grid',
+    'gridTemplateColumns' : combatant.HP/combatant.maxHP*100 + '% 1fr'
   }
 
   return (
@@ -24,17 +30,24 @@ const Combatant = ({combatant, onEnemyClick}) => {
       <div className='combatantImageOuter'>
         {combatant.imageURL&&<img className='combatantImage' src={combatant.HP>0?combatant.imageURL:''}></img>}
       </div>
-      <span className='combatantName' className={combatant.HP>0?'combatantName':'combatantNameDead'}>{combatant.name}</span>
       <div className = 'condition'>
-        {combatant.HP>0 && <span>❤️: <span className='health'>{combatant.HP&&combatant.HP>0?combatant.HP:0}</span></span>}
-        {combatant.HP>0 && <span>🛡️: <span className='block'>{combatant.block&&combatant.block>0?combatant.block:0}</span></span>}
+        {combatant.HP>0 && <div style={healthBarStyle} className='healthBar'><div className='healthBarBackground'></div><div className='healthBarInner' style={combatant.block>0?{'backgroundColor':'#00F'}:{'backgroundColor':'#F00'}}></div><div className='healthBarText'>{combatant.HP}/{combatant.maxHP}</div></div>}
+        {combatant.team == "A" && combatant.HP>0 && combatant.block > 0 && <span className={'blockOuter' + combatant.team}><span className="blockIcon">🛡️</span><span className='block'>{combatant.block&&combatant.block>0?combatant.block:0}</span></span>}
+        {combatant.team == "B" && combatant.HP>0 && combatant.block > 0 && <span className={'blockOuter' + combatant.team}><span className='block'>{combatant.block&&combatant.block>0?combatant.block:0}</span><span className="blockIcon">🛡️</span></span>}
       </div>
-      <div className = 'statuses'>
-        {(combatant.status.vulnerable>0) && <span className='statusIcon'> 💔</span>}
-        {(combatant.status.vulnerable>0)&&<span className='statusSubscript'>{combatant.status.vulnerable}</span>}
-        {(combatant.status.strength>0) && <span className='statusIcon'> 💪</span>}
-        {(combatant.status.strength>0)&&<span className='statusSubscript'>{combatant.status.strength}</span>}
+      <div className = 'statusesOuter'>
+        <div className = 'statuses'>
+          <div className='status'>
+            {(combatant.status.vulnerable>0) && <span className='statusIcon'> 💔</span>}
+            {(combatant.status.vulnerable>0)&&<span className='statusSubscript'>{combatant.status.vulnerable}</span>}
+          </div>
+          <div className='status'>
+            {(combatant.status.strength>0) && <span className='statusIcon'> 💪</span>}
+            {(combatant.status.strength>0)&&<span className='statusSubscript'>{combatant.status.strength}</span>}
+          </div>
+        </div>
       </div>
+      <span className={combatant.HP>0?'combatantName':'combatantNameDead'} onMouseEnter={()=>setNameVisible(true)} onMouseLeave={()=>setNameVisible(false)}>{nameVisible?combatant.name:''}</span>
       <div></div>
     </div>
   )
