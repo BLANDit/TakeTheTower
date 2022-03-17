@@ -1,6 +1,6 @@
 # Practicing React by making a Deckbuilder RPG
 
-![screenshot](https://i.imgur.com/BzpWGGf.png)
+![screenshot](https://i.imgur.com/WXdEne9.png)
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
