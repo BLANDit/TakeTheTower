@@ -35,7 +35,18 @@ function App() {
       status: {},
       intent: {},
       imageURL: "images/Strider.png"
-    }
+    },
+    {
+      id: 2,
+      name: "Strider",
+      team: "B",
+      HP: 46,
+      maxHP: 46,
+      block: 0,
+      status: {},
+      intent: {},
+      imageURL: "images/Strider.png"
+    },
   ])
 
   const [enemyIntents, setEnemyIntents] = useState([
@@ -103,10 +114,9 @@ function App() {
         setPhase('draw');
         draw(5);
         let enemies = combatantsCopy.filter((combatant)=>combatant.team != activeCombatant.team)
-        //const randomIntentId = parseInt(Math.random()*enemyIntents.length)
-        const intentId = turnCounter % enemyIntents.length;
-        console.log(intentId);
-        enemies.map((enemy)=>enemy.intent = enemyIntents.find((intent)=>intent.id == intentId));
+        //const intentId = turnCounter % enemyIntents.length;
+        enemies.map((enemy)=>enemy.intent = enemyIntents[parseInt(Math.random()*enemyIntents.length)]);
+        console.log(enemies);
       } else{
         
       }
@@ -210,7 +220,7 @@ function App() {
       targetCombatant.status.vulnerable = targetCombatant.status.vulnerable?targetCombatant.status.vulnerable+cardPlayed.effects.applyVulnerable:cardPlayed.effects.applyVulnerable;
     }
 
-    combatantsCopy.filter((combatant)=>combatant.HP <= 0).map((combatant)=>{console.log(combatant); combatant.block = 0; combatant.status={}; if(combatant.intent)combatant.intent={}});
+    combatantsCopy = combatantsCopy.filter((combatant)=>combatant.HP>0);
 
     discard(activeCard);
 
@@ -232,7 +242,6 @@ function App() {
       if(activeCombatant.status.strength) damage += activeCombatant.status.strength;
       if(targetCombatant.status.vulnerable) damage = parseInt(damage*1.5);
       let damageRemaining = damage;
-      console.log(targetCombatant.name, 'has', targetCombatant.block, 'block')
       if(targetCombatant.block >= damageRemaining){
         targetCombatant.block -= damageRemaining;
       }
@@ -252,6 +261,8 @@ function App() {
       activeCombatant.status.strength = activeCombatant.status.strength?activeCombatant.status.strength+intent.gainStrength:intent.gainStrength;
     }
 
+    activeCombatant.intent = {};
+
     setHand(handCopy);
     setDrawPile(drawPileCopy);
     setDiscardPile(discardPileCopy);
@@ -270,7 +281,12 @@ function App() {
       executeIntent();
       setTurnCounter(turnCounter+1);
     }
-    setActiveCombatantId((activeCombatantId+1)%combatants.length);
+    let activeCombatantIndex = (combatantsCopy.indexOf(activeCombatant) + 1)%combatantsCopy.length;
+    if(combatantsCopy[activeCombatantIndex]){
+      setActiveCombatantId(combatantsCopy[activeCombatantIndex].id);
+    }
+    
+    //setActiveCombatantId((activeCombatantId+1)%combatants.length);
     setPhase('beginTurn');
   }
 
@@ -286,20 +302,26 @@ function App() {
         </div>
         <div className = 'battlefieldBackground'></div>
       </div>
-      <div className = 'deck'>
-        <div className = 'beforeHand'>
-          <div className='energyOuter'>
-            <Energy energy={combatants.find((combatant)=>combatant.id===activeCombatantId).energy} maxEnergy={combatants.find((combatant)=>combatant.id===activeCombatantId).maxEnergy}></Energy>
-          </div>
-          <DrawPile drawPile={drawPile}></DrawPile>
+      {activeCombatant.team == 'A' && <div className = 'deck'>
+        <div className='energyOuter'>
+          <Energy energy={combatants.find((combatant)=>combatant.id===activeCombatantId).energy} maxEnergy={combatants.find((combatant)=>combatant.id===activeCombatantId).maxEnergy}></Energy>
         </div>
+        <DrawPile drawPile={drawPile}></DrawPile>
         <Hand hand={hand} selectCard={selectCard} deselectCard={deselectCard} activeCard={activeCard} energyRemaining={activeCombatant.energy}></Hand>
-        <div className = 'afterHand'>
-          <EndTurnButton endCurrentTurn={endCurrentTurn}></EndTurnButton>
-          {exhaustPile.length > 0 && <ExhaustPile exhaustPile = {exhaustPile}></ExhaustPile> }
-          <DiscardPile discardPile = {discardPile}></DiscardPile>
+        <EndTurnButton endCurrentTurn={endCurrentTurn}></EndTurnButton>
+        {exhaustPile.length > 0 && <ExhaustPile exhaustPile = {exhaustPile}></ExhaustPile> }
+        <DiscardPile discardPile = {discardPile}></DiscardPile>
+      </div>}
+      {activeCombatant.team != 'A' && <div className='enemyDeck' style={{'gridTemplateColumns': combatantsCopy.map((combatant)=>1/combatants.length*100+'%').join(' ')}}>
+        <div className='intentExplainer' style={{'gridArea':'1/'+(combatantsCopy.indexOf(activeCombatant)+1)+'/2/'+(combatantsCopy.indexOf(activeCombatant)+2)}}>
+          {activeCombatant.intent.dealDamage && <span>Enemy intends to attack for {activeCombatant.intent.dealDamage+(activeCombatant.status.strength?activeCombatant.status.strength:0)}!</span>}
+          {activeCombatant.intent.gainBlock && <span>Enemy intends to block</span>}
+          {activeCombatant.intent.gainStrength && <span>Enemy intends to buff itself</span>}
         </div>
-      </div>
+        <button className='advanceButton' onClick={()=>endCurrentTurn()} style={{'gridArea':'2/'+(combatantsCopy.indexOf(activeCombatant)+1)+'/3/'+(combatantsCopy.indexOf(activeCombatant)+2)}}>
+          <span>Advance</span>
+        </button>
+      </div>}
     </div>
     
   );

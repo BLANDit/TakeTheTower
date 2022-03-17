@@ -9,7 +9,7 @@ const Energy = ({energy, maxEnergy}) => {
   }
 
   return (
-    <div className = 'energy'>
+    <div className = {energy>0?'energy':'energyEmpty'}>
         <div className='energyInner'>{energy}/{maxEnergy}</div>
     </div>
   )
